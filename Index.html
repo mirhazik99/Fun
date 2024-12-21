@@ -1,0 +1,93 @@
+<div style="font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(to bottom right, #2b2d42, #8d99ae, #4a4e69); text-align: center; color: white;">
+  <div style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); max-width: 400px; width: 100%;">
+    <h2 style="color: #333;">Earn Money by Shortening Links</h2>
+    <p style="color: #555;">You need to shorten URLs to earn money. Reach $50 to withdraw!</p>
+
+    <form action="" onsubmit="return false;">
+      <input 
+        type="url" 
+        id="urlInput" 
+        placeholder="Enter your URL here" 
+        style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 10px; margin-bottom: 10px; font-size: 14px;" 
+        required>
+      <button 
+        type="button" 
+        onclick="earnMoney()" 
+        style="width: 100%; padding: 10px; background: linear-gradient(to right, #000, #00f); color: white; border: none; border-radius: 10px; cursor: pointer;">
+        Shorten URL
+      </button>
+    </form>
+    
+    <div id="status" style="margin-top: 20px; color: #333;">
+      <p>Balance: $<span id="balance">0.00</span></p>
+    </div>
+    
+    <div id="result" style="margin-top: 20px; display: none;">
+      <p style="color: #333; font-weight: bold;">Payment Successful:</p>
+      <p id="paymentMessage" style="color: #28a745;"></p>
+      <a id="shortenedUrl" href="#" target="_blank" style="color: #007bff;"></a>
+    </div>
+    
+    <div id="withdrawDiv" style="display: none; margin-top: 20px;">
+      <button 
+        type="button" 
+        onclick="withdrawMoney()" 
+        style="width: 100%; padding: 10px; background: linear-gradient(to right, #ff0000, #00f); color: white; border: none; border-radius: 10px; cursor: pointer;">
+        Withdraw $50
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Load balance from localStorage if available
+  let balance = parseFloat(localStorage.getItem('balance')) || 0;
+
+  // Update the displayed balance on page load
+  document.getElementById('balance').textContent = balance.toFixed(2);
+
+  function earnMoney() {
+    const url = document.getElementById('urlInput').value;
+
+    if (!url) {
+      alert('Please enter a valid URL!');
+      return;
+    }
+
+    // Simulate earning $0.50 for every URL shortened
+    balance += 0.50;
+
+    // Update balance in localStorage
+    localStorage.setItem('balance', balance.toFixed(2));
+
+    // Update balance on screen
+    document.getElementById('balance').textContent = balance.toFixed(2);
+
+    // Show payment success message
+    const successMessage = "You earned $0.50! Keep shortening URLs to reach $50.";
+    document.getElementById('paymentMessage').textContent = successMessage;
+    document.getElementById('shortenedUrl').textContent = "Your shortened URL: https://tinyurl.com/yourCustomLink";
+    document.getElementById('shortenedUrl').href = "https://tinyurl.com/yourCustomLink";
+    document.getElementById('result').style.display = 'block';
+
+    // Check if the balance reaches $50 and show withdraw button
+    if (balance >= 50) {
+      document.getElementById('withdrawDiv').style.display = 'block';
+    }
+  }
+
+  function withdrawMoney() {
+    alert("Congratulations! You have successfully withdrawn $50!");
+    // Reset balance after withdrawal
+    balance = 0;
+    localStorage.setItem('balance', balance.toFixed(2));
+
+    // Update balance on the page
+    document.getElementById('balance').textContent = balance.toFixed(2);
+    document.getElementById('withdrawDiv').style.display = 'none';
+    document.getElementById('result').style.display = 'none';
+
+    // Prank message
+    alert("This is a prank! Please try again with a real service.");
+  }
+</script>
